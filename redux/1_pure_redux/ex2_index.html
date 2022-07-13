@@ -1,0 +1,128 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.2.0/redux.min.js"></script>
+  </head>
+  <body>
+    <div id="subject"></div>
+    <div id="TOC"></div>
+    <div id="control"></div>
+    <div id="content"></div>
+    <script>
+      const subject = () => {
+        document.querySelector("#subject").innerHTML = `
+        <header>
+          <h1>WEB</h1>
+          Hello, WEB!
+        </header>
+        `;
+      };
+      const TOC = () => {
+        const state = store.getState();
+        let toc = ``;
+        state.contents.map((data) => {
+          toc += `<li><a href="${data.id}" onclick="event.preventDefault();store.dispatch({type:'SELECT', id:${data.id}})">${data.title}</a></li>`;
+        });
+        document.querySelector("#TOC").innerHTML = `
+        <nav>
+          <ol>
+            ${toc}
+          </ol>
+        </nav>`;
+      };
+      const control = () => {
+        document.querySelector("#control").innerHTML = `
+        <ul>
+          <li><a href="/create" onclick="event.preventDefault();store.dispatch({type:'CHANGE_MODE'})">create</a></li>
+          <li><input type="button" value="deleted" onclick="store.dispatch({type:'DELETED'})" /></li>
+        </ul>`;
+      };
+      const content = () => {
+        const state = store.getState();
+        let data = ``;
+        if (state.mode === "read") {
+          data = `
+         <article>
+          <h2>Redux</h2>
+          Redux is ..
+        </article>
+        `;
+          const a = state.contents.filter((data) => data.id === state.selected_id);
+          if (a.length > 0) {
+            data = `<article>
+            <h2>${a[0].title}</h2>
+            ${a[0].desc}
+          </article>`;
+          }
+        } else if (state.mode === "create") {
+          data = `
+          <article>
+            <form
+              onsubmit="event.preventDefault();
+              const _title = this.title.value;
+              const _desc = this.desc.value
+              store.dispatch({type:'CREATE', title:_title, desc:_desc})"
+              ;
+            >
+              <p><input type="text" name="title" placeholder="title" /></p>
+              <p><textarea name="desc" placeholder="description"></textarea></p>
+              <p><input type="submit" /></p>
+            </form>
+          </article>`;
+        }
+
+        document.querySelector("#content").innerHTML = data;
+      };
+
+      const reducer = (state, action) => {
+        if (state === undefined) {
+          return {
+            max_id: 2,
+            mode: "read",
+            selected_id: null,
+            contents: [
+              { id: 1, title: "HTML", desc: "HTML is .." },
+              { id: 2, title: "CSS", desc: "CSS is .." },
+            ],
+          };
+        }
+        let newState;
+        if (action.type === "SELECT") {
+          newState = Object.assign({}, state, { selected_id: action.id });
+          return newState;
+        } else if (action.type === "CREATE") {
+          const newMaxId = state.max_id + 1;
+          let newContent = state.contents.concat();
+          newContent.push({ id: newMaxId, title: action.title, desc: action.desc });
+          newState = Object.assign({}, state, { max_id: newMaxId, contents: newContent, mode: "read" });
+          console.log(newState);
+          return newState;
+        } else if (action.type === "CHANGE_MODE") {
+          newState = Object.assign({}, state, { mode: "create" });
+          return newState;
+        } else if (action.type === "DELETED") {
+          let newContent = state.contents.concat();
+          newContent.filter((content) => content.id !== state.selected_id);
+          console.log(newContent);
+          newState = Object.assign({}, state, { contents: newContent });
+          return newState;
+        }
+      };
+
+      const store = Redux.createStore(reducer);
+
+      // store.subscribe(subject);
+      store.subscribe(TOC);
+      // store.subscribe(control);
+      store.subscribe(content);
+      subject();
+      TOC();
+      control();
+      content();
+    </script>
+  </body>
+</html>
