@@ -98,16 +98,14 @@
           const newMaxId = state.max_id + 1;
           let newContent = state.contents.concat();
           newContent.push({ id: newMaxId, title: action.title, desc: action.desc });
-          newState = Object.assign({}, state, { max_id: newMaxId, contents: newContent, mode: "read" });
-          console.log(newState);
+          newState = Object.assign({}, state, { max_id: newMaxId, contents: newContent, mode: "read", selected_id: newMaxId });
           return newState;
         } else if (action.type === "CHANGE_MODE") {
           newState = Object.assign({}, state, { mode: "create" });
           return newState;
         } else if (action.type === "DELETED") {
           let newContent = state.contents.concat();
-          newContent.filter((content) => content.id !== state.selected_id);
-          console.log(newContent);
+          newContent = newContent.filter((content) => content.id !== state.selected_id);
           newState = Object.assign({}, state, { contents: newContent });
           return newState;
         }
