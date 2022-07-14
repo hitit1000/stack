@@ -1,0 +1,10 @@
+.container,
+.container > .box div {
+  border: 5px solid red;
+  margin: 10px;
+  flex: auto;
+}
+
+.box {
+  display: flex;
+}
