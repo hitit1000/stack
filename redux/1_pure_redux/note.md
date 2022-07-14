@@ -33,3 +33,10 @@ subscribe :: 등록 된 render 실행
 action :: dispatch를 호출(전달)
 dispatch :: reducer를 호출해서 satate값을 업데이트
 -------- :: subscribe 호출
+
+# redux-middleware
+
+- action 과 reducer 사이에 중간자.
+- 사진 참조 ( redux_action_flow.png & redux_middleware_action_flow.png )
+- 로그, 비동기작업, 추가적인 규칙 등을 위해 사용
+- redux-thunk, redux-saga 등이 있음.
