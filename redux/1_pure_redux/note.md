@@ -1,12 +1,18 @@
 # ref
 
+https://www.youtube.com/watch?v=QZcYz2NrDIs&t=326s
+
+ex1, ex2
 https://www.youtube.com/watch?v=Jr9i3Lgb5Qc&list=PLuHgQVnccGMB-iGMgONoRPArZfjRuRNVc
 
-https://www.youtube.com/watch?v=QZcYz2NrDIs&t=326s
+ex3
+https://www.youtube.com/watch?v=wSbjROmXTaY
 
 # command
 
-npm install redux
+npm init -y
+npm i redux
+npm i redux-logger
 
 # redux 란
 
